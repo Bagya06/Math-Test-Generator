@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Test Generator - K to 12</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        .test-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .print-btn {
+            background-color: var(--accent);
+        }
+        
+        .answer-key {
+            display: none;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .answer-toggle {
+            background-color: var(--success);
+            margin-top: 15px;
+        }
+        
+        @media print {
+            .controls, .actions, header {
+                display: none;
+            }
+            
+            .test-container {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1> Math Test Generator</h1>
+            <p>Create customized math tests for Kindergarten through 12th Grade</p>
+        </header>
+        
+        <div class="controls">
+            <div class="form-group">
+                <label for="grade">Grade Level:</label>
+                <select id="grade">
+                    <option value="K">Kindergarten</option>
+                    <option value="1">Grade 1</option>
+                    <option value="2">Grade 2</option>
+                    <option value="3">Grade 3</option>
+                    <option value="4">Grade 4</option>
+                    <option value="5">Grade 5</option>
+                    <option value="6">Grade 6</option>
+                    <option value="7">Grade 7</option>
+                    <option value="8">Grade 8</option>
+                    <option value="9">Grade 9 (Algebra I)</option>
+                    <option value="10">Grade 10 (Geometry)</option>
+                    <option value="11">Grade 11 (Algebra II)</option>
+                    <option value="12">Grade 12 (Pre-Calculus)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Math Topics:</label>
+                <div class="checkbox-group" id="topics">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="arithmetic" checked>
+                        <label for="arithmetic">Arithmetic</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="algebra">
+                        <label for="algebra">Algebra</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="geometry">
+                        <label for="geometry">Geometry</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="fractions">
+                        <label for="fractions">Fractions</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="wordProblems">
+                        <label for="wordProblems">Word Problems</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="difficulty">Difficulty Level:</label>
+                <input type="range" id="difficulty" min="1" max="5" value="3">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Easy</span>
+                    <span>Medium</span>
+                    <span>Challenging</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="questionCount">Number of Questions:</label>
+                <input type="number" id="questionCount" min="5" max="50" value="20">
+            </div>
+            
+            <button id="generateBtn">Generate Test</button>
+        </div>
+        
+        <div class="test-container" id="testContainer">
+            <div class="test-header">
+                <h2 id="testTitle">Math Test</h2>
+                <p id="testSubtitle">Grade Level: <span id="gradeDisplay">K</span></p>
+            </div>
+            
+            <div id="questionsList">
+                <p class="no-questions">Select your preferences and click "Generate Test" to create a customized math test.</p>
+            </div>
+            
+            <div class="actions">
+                <button id="printBtn" class="print-btn">Print Test</button>
+                <button id="answerKeyBtn" class="answer-toggle">Show Answer Key</button>
+            </div>
+            
+            <div class="answer-key" id="answerKey">
+                <h3>Answer Key</h3>
+                <div id="answerList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gradeSelect = document.getElementById('grade');
+            const generateBtn = document.getElementById('generateBtn');
+            const questionsList = document.getElementById('questionsList');
+            const answerList = document.getElementById('answerList');
+            const answerKey = document.getElementById('answerKey');
+            const answerKeyBtn = document.getElementById('answerKeyBtn');
+            const printBtn = document.getElementById('printBtn');
+            const gradeDisplay = document.getElementById('gradeDisplay');
+            const testTitle = document.getElementById('testTitle');
+            const difficultySlider = document.getElementById('difficulty');
+            
+            let currentQuestions = [];
+            let currentAnswers = [];
+            
+            // Update grade display when selection changes
+            gradeSelect.addEventListener('change', function() {
+                gradeDisplay.textContent = getGradeName(this.value);
+            });
+            
+            // Generate test when button is clicked
+            generateBtn.addEventListener('click', generateTest);
+            
+            // Toggle answer key
+            answerKeyBtn.addEventListener('click', function() {
+                const isVisible = answerKey.style.display === 'block';
+                answerKey.style.display = isVisible ? 'none' : 'block';
+                this.textContent = isVisible ? 'Show Answer Key' : 'Hide Answer Key';
+            });
+            
+            // Print test
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Function to generate test based on user preferences
+            function generateTest() {
+                const grade = gradeSelect.value;
+                const questionCount = parseInt(document.getElementById('questionCount').value);
+                const difficulty = parseInt(difficultySlider.value);
+                
+                // Get selected topics
+                const selectedTopics = [];
+                if (document.getElementById('arithmetic').checked) selectedTopics.push('arithmetic');
+                if (document.getElementById('algebra').checked) selectedTopics.push('algebra');
+                if (document.getElementById('geometry').checked) selectedTopics.push('geometry');
+                if (document.getElementById('fractions').checked) selectedTopics.push('fractions');
+                if (document.getElementById('wordProblems').checked) selectedTopics.push('wordProblems');
+                
+                // Update test title
+                testTitle.textContent = `${getGradeName(grade)} Mathematics Assessment`;
+                gradeDisplay.textContent = getGradeName(grade);
+                
+                // Clear previous questions
+                questionsList.innerHTML = '';
+                answerList.innerHTML = '';
+                answerKey.style.display = 'none';
+                answerKeyBtn.textContent = 'Show Answer Key';
+                
+                // Generate new questions
+                currentQuestions = [];
+                currentAnswers = [];
+                
+                for (let i = 1; i <= questionCount; i++) {
+                    const questionData = generateQuestion(i, grade, difficulty, selectedTopics);
+                    currentQuestions.push(questionData);
+                    currentAnswers.push(questionData.answer);
+                    
+                    const questionEl = document.createElement('div');
+                    questionEl.className = 'question';
+                    questionEl.innerHTML = `
+                        <p><span class="question-number">${i}.</span> ${questionData.question}</p>
+                        ${questionData.options ? `
+                        <div style="margin-left: 20px; margin-top: 10px;">
+                            ${questionData.options.map((opt, idx) => `
+                                <div>${String.fromCharCode(65 + idx)}) ${opt}</div>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                    `;
+                    
+                    questionsList.appendChild(questionEl);
+                    
+                    const answerEl = document.createElement('div');
+                    answerEl.className = 'answer';
+                    answerEl.innerHTML = `
+                        <p><strong>${i}.</strong> ${questionData.answer}</p>
+                    `;
+                    answerList.appendChild(answerEl);
+                }
+            }
+            
+            // Function to generate a question based on parameters
+            function generateQuestion(number, grade, difficulty, topics) {
+                // Convert grade to numeric value
+                const gradeLevel = grade === 'K' ? 0 : parseInt(grade);
+                
+                // Select a random topic from available ones
+                const topic = topics[Math.floor(Math.random() * topics.length)];
+                
+                // Question generation logic based on grade and topic
+                if (gradeLevel <= 2) {
+                    // Kindergarten to Grade 2
+                    return generateElementaryQuestion(gradeLevel, difficulty, topic);
+                } else if (gradeLevel <= 5) {
+                    // Grades 3-5
+                    return generateIntermediateQuestion(gradeLevel, difficulty, topic);
+                } else if (gradeLevel <= 8) {
+                    // Middle school
+                    return generateMiddleSchoolQuestion(gradeLevel, difficulty, topic);
+                } else {
+                    // High school
+                    return generateHighSchoolQuestion(gradeLevel, difficulty, topic);
+                }
+            }
+            
+            // Question generators for different levels
+            function generateElementaryQuestion(grade, difficulty, topic) {
+                const operations = ['+', '-'];
+                let a, b, result, question, answer;
+                
+                // Adjust numbers based on difficulty
+                const maxNum = 5 + (difficulty * 5);
+                
+                if (topic === 'arithmetic' || topic === 'wordProblems') {
+                    const op = operations[Math.floor(Math.random() * operations.length)];
+                    
+                    if (op === '+') {
+                        a = Math.floor(Math.random() * maxNum) + 1;
+                        b = Math.floor(Math.random() * maxNum) + 1;
+                        result = a + b;
+                        
+                        if (topic === 'wordProblems' && Math.random() > 0.5) {
+                            const subjects = ['apples', 'toy cars', 'candies', 'pencils', 'books'];
+                            const subject = subjects[Math.floor(Math.random() * subjects.length)];
+                            question = `If you have ${a} ${subject} and get ${b} more, how many do you have now?`;
+                        } else {
+                            question = `What is ${a} + ${b}?`;
+                        }
+                    } else {
+                        a = Math.floor(Math.random() * maxNum) + 1;
+                        b = Math.floor(Math.random() * a); // Ensure positive result
+                        result = a - b;
+                        
+                        if (topic === 'wordProblems' && Math.random() > 0.5) {
+                            const subjects = ['apples', 'candies', 'toys', 'crayons'];
+                            const subject = subjects[Math.floor(Math.random() * subjects.length)];
+                            question = `If you have ${a} ${subject} and give ${b} to a friend, how many do you have left?`;
+                        } else {
+                            question = `What is ${a} - ${b}?`;
+                        }
+                    }
+                    answer = result.toString();
+                } else if (topic === 'geometry') {
+                    const shapes = ['circle', 'square', 'triangle', 'rectangle'];
+                    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                    question = `What shape has ${getShapeSides(shape)} sides?`;
+                    answer = shape;
+                } else {
+                    // Fractions for elementary
+                    const fractions = ['½', '⅓', '¼', '⅕'];
+                    const fraction = fractions[Math.floor(Math.random() * fractions.length)];
+                    question = `What is one part of a whole divided into ${fraction.replace('½', '2').replace('⅓', '3').replace('¼', '4').replace('⅕', '5')} equal parts?`;
+                    answer = fraction;
+                }
+                
+                return {
+                    question,
+                    answer,
+                    options: difficulty > 2 ? generateOptions(answer, 4) : null
+                };
+            }
+            
+            function generateIntermediateQuestion(grade, difficulty, topic) {
+                // Similar structure but with more advanced concepts
+                // Implementation would include multiplication, division, basic fractions, etc.
+                return {
+                    question: "Sample intermediate question",
+                    answer: "42",
+                    options: ["40", "41", "42", "43"]
+                };
+            }
+            
+            function generateMiddleSchoolQuestion(grade, difficulty, topic) {
+                // Pre-algebra, basic geometry, percentages, etc.
+                return {
+                    question: "Sample middle school question",
+                    answer: "x = 5",
+                    options: ["x = 3", "x = 4", "x = 5", "x = 6"]
+                };
+            }
+            
+            function generateHighSchoolQuestion(grade, difficulty, topic) {
+                // Algebra, geometry, trigonometry, calculus
+                return {
+                    question: "Sample high school question",
+                    answer: "y = 2x + 3",
+                    options: ["y = x + 3", "y = 2x + 3", "y = 3x + 2", "y = 2x + 5"]
+                };
+            }
+            
+            // Helper functions
+            function getGradeName(grade) {
+                if (grade === 'K') return 'Kindergarten';
+                if (grade === '9') return 'Grade 9 (Algebra I)';
+                if (grade === '10') return 'Grade 10 (Geometry)';
+                if (grade === '11') return 'Grade 11 (Algebra II)';
+                if (grade === '12') return 'Grade 12 (Pre-Calculus)';
+                return `Grade ${grade}`;
+            }
+            
+            function getShapeSides(shape) {
+                const sides = {
+                    'circle': 0,
+                    'square': 4,
+                    'triangle': 3,
+                    'rectangle': 4
+                };
+                return sides[shape];
+            }
+            
+            function generateOptions(correctAnswer, count) {
+                const options = [correctAnswer];
+                const numericAnswer = parseFloat(correctAnswer);
+                const isNumeric = !isNaN(numericAnswer);
+                
+                while (options.length < count) {
+                    let option;
+                    if (isNumeric) {
+                        // For numeric answers, generate options close to the correct answer
+                        const variation = Math.max(1, numericAnswer * 0.2);
+                        option = (numericAnswer + (Math.random() * variation * 2 - variation)).toFixed(1);
+                        // Avoid duplicates
+                        if (!options.includes(option)) {
+                            options.push(option);
+                        }
+                    } else {
+                        // For non-numeric, just add placeholder options
+                        option = `Option ${options.length}`;
+                        options.push(option);
+                    }
+                }
+                
+                // Shuffle options
+                return shuffleArray(options);
+            }
+            
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+        });
+    </script>
+</body>
+</html>
